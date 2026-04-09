@@ -23,19 +23,30 @@ jobs:
           java-version: '17'
           cache: maven
 
-      - name: Pruebas automaticas
-        id: pruebas-automaticas
+      - name: ColaTest
+        id: colatest
         uses: classroom-resources/autograding-command-grader@v1
         with:
-          test-name: Pruebas automaticas
+          test-name: ColaTest
           setup-command: ""
-          command: mvn -B test
+          command: mvn -B -Dtest=ColaTest test
           timeout: 10
-          max-score: 100
+          max-score: 50
+
+      - name: PilaTest
+        id: pilatest
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: PilaTest
+          setup-command: ""
+          command: mvn -B -Dtest=PilaTest test
+          timeout: 10
+          max-score: 50
 
       - name: Autograding Reporter
         uses: classroom-resources/autograding-grading-reporter@v1
         env:
-          PRUEBAS-AUTOMATICAS_RESULTS: "${{ steps.pruebas-automaticas.outputs.result }}"
+          COLATEST_RESULTS: "${{ steps.colatest.outputs.result }}"
+          PILATEST_RESULTS: "${{ steps.pilatest.outputs.result }}"
         with:
-          runners: pruebas-automaticas
+          runners: colatest,pilatest
