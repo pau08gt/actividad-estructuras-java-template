@@ -16,19 +16,26 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: maven
+
       - name: Pruebas automaticas
         id: pruebas-automaticas
         uses: classroom-resources/autograding-command-grader@v1
         with:
           test-name: Pruebas automaticas
           setup-command: ""
-          command: mvn test
+          command: mvn -B test
           timeout: 10
           max-score: 100
 
       - name: Autograding Reporter
         uses: classroom-resources/autograding-grading-reporter@v1
         env:
-          PRUEBAS-AUTOMATICAS_RESULTS: "${{steps.pruebas-automaticas.outputs.result}}"
+          PRUEBAS-AUTOMATICAS_RESULTS: "${{ steps.pruebas-automaticas.outputs.result }}"
         with:
           runners: pruebas-automaticas
