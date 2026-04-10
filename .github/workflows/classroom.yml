@@ -1,4 +1,5 @@
 name: Autograding Tests
+
 'on':
   - push
   - repository_dispatch
@@ -23,30 +24,96 @@ jobs:
           java-version: '17'
           cache: maven
 
-      - name: ColaTest
-        id: colatest
+      - name: Cola FIFO
+        id: cola-fifo
         uses: classroom-resources/autograding-command-grader@v1
         with:
-          test-name: ColaTest
+          test-name: Cola FIFO
           setup-command: ""
-          command: mvn -B -Dtest=ColaTest test
+          command: mvn -B -Dtest=ColaTest#debeEncolarYDesencolarEnOrdenFIFO test
           timeout: 10
-          max-score: 50
+          max-score: 20
 
-      - name: PilaTest
-        id: pilatest
+      - name: Cola frente
+        id: cola-frente
         uses: classroom-resources/autograding-command-grader@v1
         with:
-          test-name: PilaTest
+          test-name: Cola frente
           setup-command: ""
-          command: mvn -B -Dtest=PilaTest test
+          command: mvn -B -Dtest=ColaTest#debeMostrarElFrenteSinEliminar test
           timeout: 10
-          max-score: 50
+          max-score: 10
+
+      - name: Cola null
+        id: cola-null
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: Cola null
+          setup-command: ""
+          command: mvn -B -Dtest=ColaTest#noDebeAceptarNull test
+          timeout: 10
+          max-score: 10
+
+      - name: Cola vacia
+        id: cola-vacia
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: Cola vacia
+          setup-command: ""
+          command: mvn -B -Dtest=ColaTest#desencolarEnVaciaDebeLanzarExcepcion test
+          timeout: 10
+          max-score: 10
+
+      - name: Pila LIFO
+        id: pila-lifo
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: Pila LIFO
+          setup-command: ""
+          command: mvn -B -Dtest=PilaTest#debeApilarYDesapilarEnOrdenLIFO test
+          timeout: 10
+          max-score: 20
+
+      - name: Pila cima
+        id: pila-cima
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: Pila cima
+          setup-command: ""
+          command: mvn -B -Dtest=PilaTest#debeMostrarCimaSinEliminar test
+          timeout: 10
+          max-score: 10
+
+      - name: Pila null
+        id: pila-null
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: Pila null
+          setup-command: ""
+          command: mvn -B -Dtest=PilaTest#noDebeAceptarNull test
+          timeout: 10
+          max-score: 10
+
+      - name: Pila vacia
+        id: pila-vacia
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: Pila vacia
+          setup-command: ""
+          command: mvn -B -Dtest=PilaTest#cimaEnVaciaDebeLanzarExcepcion test
+          timeout: 10
+          max-score: 10
 
       - name: Autograding Reporter
         uses: classroom-resources/autograding-grading-reporter@v1
         env:
-          COLATEST_RESULTS: "${{ steps.colatest.outputs.result }}"
-          PILATEST_RESULTS: "${{ steps.pilatest.outputs.result }}"
+          COLA-FIFO_RESULTS: "${{ steps.cola-fifo.outputs.result }}"
+          COLA-FRENTE_RESULTS: "${{ steps.cola-frente.outputs.result }}"
+          COLA-NULL_RESULTS: "${{ steps.cola-null.outputs.result }}"
+          COLA-VACIA_RESULTS: "${{ steps.cola-vacia.outputs.result }}"
+          PILA-LIFO_RESULTS: "${{ steps.pila-lifo.outputs.result }}"
+          PILA-CIMA_RESULTS: "${{ steps.pila-cima.outputs.result }}"
+          PILA-NULL_RESULTS: "${{ steps.pila-null.outputs.result }}"
+          PILA-VACIA_RESULTS: "${{ steps.pila-vacia.outputs.result }}"
         with:
-          runners: colatest,pilatest
+          runners: cola-fifo,cola-frente,cola-null,cola-vacia,pila-lifo,pila-cima,pila-null,pila-vacia
